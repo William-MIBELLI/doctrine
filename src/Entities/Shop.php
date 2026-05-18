@@ -83,12 +83,110 @@ class Shop
     $this->availabilities = new ArrayCollection();
   }
 
-  // public function hydrate(array $data): void
-  // {
-  //   foreach ($data as $key => $value) {
-  //     if (property_exists($this, $key)) {
-  //       $this->$key = $value;
-  //     }
-  //   }
-  // }
+  public function getId(): ?int
+  {
+      return $this->id;
+  }
+
+  public function getAvailabilities(): Collection
+  {
+      return $this->availabilities;
+  }
+
+  public function getCreatedAt(): DateTime
+  {
+      return $this->createdAt;
+  }
+
+  public function getPlaceName(): string
+  {
+      return $this->placeName;
+  }
+
+  public function getPlaceCode(): int
+  {
+      return $this->placeCode;
+  }
+
+  public function getAddress(): string
+  {
+      return $this->address;
+  }
+
+  public function getPostalCode(): int
+  {
+      return $this->postalCode;
+  }
+
+  public function getCity(): string
+  {
+      return $this->city;
+  }
+
+  public function getCountry(): string
+  {
+      return $this->country;
+  }
+
+  public function getPhone(): string
+  {
+      return $this->phone;
+  }
+
+  public function getVisitCode(): string
+  {
+      return $this->visitCode;
+  }
+
+  public function getVisitName(): string
+  {
+      return $this->visitName;
+  }
+
+  public function getStartDate(): ?DateTime
+  {
+      return $this->startDate;
+  }
+
+  public function getEndDate(): ?DateTime
+  {
+      return $this->endDate;
+  }
+
+  public function getType(): string
+  {
+      return $this->type;
+  }
+
+  public function getCost(): float
+  {
+      return $this->cost;
+  }
+
+  public function getLat(): float
+  {
+      return $this->lat;
+  }
+
+  public function getLng(): float
+  {
+      return $this->lng;
+  }
+
+  public function getCanBeLunchBreak(): bool
+  {
+      return $this->canBeLunchBreak;
+  }
+
+  public function getCanBeMorning(): bool
+  {
+      return $this->canBeMorning;
+  }
+
+  public function getCanBeAfternoon(): bool
+  {
+      return $this->canBeAfternoon;
+  }
+
+
 }
