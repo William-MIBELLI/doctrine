@@ -2,21 +2,30 @@
 
 namespace App\Repositories;
 
+use App\Entities\Shop;
 use Doctrine\ORM\EntityRepository;
 
 class ShopRepository extends EntityRepository
 {
-  public function getAllShops()
+  /**
+   * @return Shop[]
+   */
+  public function getAllShops(): array
   {
     return parent::findAll();
   }
 
-  public function getShopByCountry(string $country)
+  /**
+   * Summary of getShopByCountry
+   * @param string $country
+   * @return Shop[]
+   */
+  public function getShopByCountry(string $country): array
   {
     return parent::findBy(['country' => $country], ['id' => 'ASC']);
   }
 
-  public function getShopById(string $id)
+  public function getShopById(string $id): Shop | null
   {
     return parent::findOneBy(['id' => $id]);
   }

@@ -13,7 +13,7 @@ abstract class AbstractController
   protected function json(mixed $data, int $status = 200)
   {
     $encoders = [new JsonEncoder()];
-    $normalizers = [new PropertyNormalizer(), new DateTimeNormalizer()];
+    $normalizers = [new ObjectNormalizer()];
     $serializer = new Serializer($normalizers, $encoders);
 
     $jsonContent = $serializer->serialize($data, 'json');

@@ -57,4 +57,69 @@ class Investigator
     $this->createdAt = new DateTime('now');
     $this->availabilities = new ArrayCollection();
   }
+
+  public function getId(): ?int
+  {
+      return $this->id;
+  }
+
+  public function getCreatedAt(): DateTime
+  {
+      return $this->createdAt;
+  }
+
+  public function getAvailabilities(): Collection
+  {
+      return $this->availabilities;
+  }
+
+  public function getCode(): string
+  {
+      return $this->code;
+  }
+
+  public function getLastname(): string
+  {
+      return $this->lastname;
+  }
+
+  public function getFirstname(): string
+  {
+      return $this->firstname;
+  }
+
+  public function getAddress(): string
+  {
+      return $this->address;
+  }
+
+  public function getPostalCode(): int
+  {
+      return $this->postalCode;
+  }
+
+  public function getCity(): string
+  {
+      return $this->city;
+  }
+
+  public function getCountry(): string
+  {
+      return $this->country;
+  }
+
+  public function getPhone(): string
+  {
+      return $this->phone;
+  }
+
+  public function getLat(): float
+  {
+      return $this->lat;
+  }
+
+  public function getLng(): float
+  {
+      return $this->lng;
+  }
 }

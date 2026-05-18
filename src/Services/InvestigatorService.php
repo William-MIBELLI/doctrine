@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\InvestigatorDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repositories\InvestigatorRepository;
 use App\Entities\Investigator;
@@ -18,9 +19,33 @@ class InvestigatorService
     $this->entityManager = $em;
   }
 
-  public function getAllInvestigators()
+  /**
+   * Summary of getAllInvestigators
+   * @return InvestigatorDTO[]
+   */
+  public function getAllInvestigators(): array
   {
-    return $this->repository->getAllInvestigators();
+    $investigators =  $this->repository->getAllInvestigators();
+    $dtos = [];
+
+    foreach ($investigators as $inv){
+      $dtos[] = new InvestigatorDTO(
+        $inv->getId(),
+        $inv->getCode(),
+        $inv->getLastname(),
+        $inv->getFirstname(),
+        $inv->getAddress(),
+        $inv->getPostalCode(),
+        $inv->getCity(),
+        $inv->getCountry(),
+        $inv->getPhone(),
+        $inv->getLat(),
+        $inv->getLng(),
+        $inv->getCreatedAt()->format("c")
+      );
+    }
+
+    return $dtos;
   }
 
   public function seedFromCSV()

@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Services\ShopService;
-use App\Controllers\AbstractController;
 
 class ShopController extends AbstractController
 {
@@ -16,7 +15,7 @@ class ShopController extends AbstractController
 
   public function list()
   {
-    $shops = $this->shopService->getAllShops();
-    $this->json($shops, 201);
+    $shopsDTO = $this->shopService->getAllShops();
+    $this->json($shopsDTO, 201);
   }
 }
