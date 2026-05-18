@@ -1,0 +1,4 @@
+id;code;prenom;nom;adresse;code_postal;ville;pays;telephone;lat;lng
+1;INV_1;Jean;DUGENOUX;97, Av Albert BEDOUCE;31400;TOULOUSE;France;987654321;43.580644;1.461259
+2;INV_2;Thierry;FEUILLE;2, Rue des geraniums;31400;TOULOUSE;France;987654321;43.565534;1.454985
+3;INV_3;Bernard;DU PMU;2, Rue Jacques BREL;31200;TOULOUSE;France;987654321;43.642297;1.437178

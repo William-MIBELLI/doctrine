@@ -6,7 +6,7 @@
   },
   "autoload": {
     "classmap": [
-      "src/class/"
+      "src/"
     ]
   }
 }
