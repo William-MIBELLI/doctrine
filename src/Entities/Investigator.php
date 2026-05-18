@@ -1,8 +1,11 @@
 <?php
+namespace App\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use DateTime;
+use App\Repositories\InvestigatorRepository;
 
 #[ORM\Entity(repositoryClass: InvestigatorRepository::class)]
 #[ORM\Table(name: 'investigators')]
@@ -12,6 +15,12 @@ class Investigator
   #[ORM\Column(type: 'integer')]
   #[ORM\GeneratedValue]
   private int|null $id = null;
+
+  #[ORM\Column(type: 'datetime', name: 'created_at', options: ['default' => 'CURRENT_TIMESTAMP'])]
+  private DateTime $createdAt;
+
+  #[ORM\OneToMany(targetEntity: InvestigatorAvailability::class, mappedBy: 'investigator')]
+  private Collection $availabilities;
 
   public function __construct(
     #[ORM\Column(type: 'string', unique: true)]
@@ -43,12 +52,6 @@ class Investigator
 
     #[ORM\Column(type: 'float')]
     private float $lng,
-
-    #[ORM\Column(type: 'datetime', name: 'created_at', options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private DateTime $createdAt,
-
-    #[ORM\OneToMany(targetEntity: InvestigatorAvailability::class, mappedBy: 'investigator')]
-    private Collection $availabilities,
 
   ) {
     $this->createdAt = new DateTime('now');

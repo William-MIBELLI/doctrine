@@ -1,9 +1,12 @@
 <?php
+namespace App\Entities;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
+use App\Repositories\ShopRepository;
+use App\Entities\ShopAvaibility;
 
 #[ORM\Entity(repositoryClass: ShopRepository::class)]
 #[ORM\Table(name: 'shops')]

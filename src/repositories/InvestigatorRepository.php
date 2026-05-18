@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Repositories;
+
 use Doctrine\ORM\EntityRepository;
 
 class InvestigatorRepository extends EntityRepository

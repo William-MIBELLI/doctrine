@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Controllers;
+
+use App\Services\InvestigatorService;
+
 class InvestigatorController
 {
   private InvestigatorService $service;

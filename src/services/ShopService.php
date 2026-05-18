@@ -1,6 +1,11 @@
 <?php
 
+namespace App\Services;
+
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repositories\ShopRepository;
+use DateTime;
+use App\Entities\Shop;
 
 class ShopService
 {
@@ -41,7 +46,7 @@ class ShopService
       'lat',
     ];
 
-    if (($handler = fopen(__DIR__ . '/data/visits_proxi.csv', 'r')) !== false) {
+    if (($handler = fopen(__DIR__ . '/../data/visits_proxi.csv', 'r')) !== false) {
 
       $skipped = fgetcsv($handler, null, ";", "\"", "\\");
 

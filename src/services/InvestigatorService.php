@@ -1,6 +1,10 @@
 <?php
 
+namespace App\Services;
+
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repositories\InvestigatorRepository;
+use App\Entities\Investigator;
 
 class InvestigatorService
 {
@@ -24,13 +28,13 @@ class InvestigatorService
     $keys = [
       'id',
       'code',
-      'prenom',
-      'nom',
-      'adresse',
-      'code_postal',
-      'ville',
-      'pays',
-      'telephone',
+      'firstname',
+      'lastname',
+      'address',
+      'postalCode',
+      'city',
+      'country',
+      'phone',
       'lat',
       'lng'
     ];
@@ -39,7 +43,7 @@ class InvestigatorService
     $batchSize = 200;
     $i = 0;
 
-    if (($handler = fopen("/data/investigators.csv", "r")) !== false) {
+    if (($handler = fopen(__DIR__ . "/../data/investigators.csv", "r")) !== false) {
       $skipped = fgetcsv($handler, null, ";", "\"", "\\");
 
       while (($row = fgetcsv($handler, null, ";", "\"", "\\")) !== false) {
@@ -50,7 +54,7 @@ class InvestigatorService
 
     try {
       foreach ($datas as $data) {
-        $data['postal_code'] = (int) $data['postal_code'];
+        $data['postalCode'] = (int) $data['postalCode'];
         $data['lat'] = (float) $data['lat'];
         $data['lng'] = (float) $data['lng'];
 
@@ -59,7 +63,7 @@ class InvestigatorService
         $investigator = new Investigator(...$data);
         $this->entityManager->persist($investigator);
         $i++;
-        
+
         if ($i % $batchSize === 0) {
           $this->entityManager->flush();
           $this->entityManager->clear();
