@@ -4,7 +4,7 @@ use Doctrine\ORM\EntityRepository;
 
 class ShopRepository extends EntityRepository
 {
-  public function getAllShop()
+  public function getAllShops()
   {
     return parent::findAll();
   }
@@ -13,4 +13,10 @@ class ShopRepository extends EntityRepository
   {
     return parent::findBy(['country' => $country], ['id' => 'ASC']);
   }
+
+  public function getShopById(string $id)
+  {
+    return parent::findOneBy(['id' => $id]);
+  }
+
 }
