@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Entities\ShopAvaibility;
+use App\Entities\ShopAvailability;
 use Doctrine\ORM\EntityRepository;
 
 class ShopAvailabilityRepository extends EntityRepository
@@ -10,7 +10,7 @@ class ShopAvailabilityRepository extends EntityRepository
 
   /**
    * Summary of getAllAvailabilities
-   * @return ShopAvaibility[]
+   * @return ShopAvailability[]
    */
   public function getAllAvailabilities(): array
   {

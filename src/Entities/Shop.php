@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use App\Repositories\ShopRepository;
-use App\Entities\ShopAvaibility;
 
 #[ORM\Entity(repositoryClass: ShopRepository::class)]
 #[ORM\Table(name: 'shops')]
@@ -17,7 +16,7 @@ class Shop
   #[ORM\GeneratedValue]
   private int|null $id = null;
 
-  #[ORM\OneToMany(targetEntity: ShopAvaibility::class, mappedBy: 'shop')]
+  #[ORM\OneToMany(targetEntity: ShopAvailability::class, mappedBy: 'shop')]
   private Collection $availabilities;
 
   #[ORM\Column(type: 'datetime', name: 'created_at', options: ['default' => 'CURRENT_TIMESTAMP'])]

@@ -3,9 +3,10 @@
 namespace App\Entities;
 
 use App\Entities\AbstractAvailability;
+use App\Repositories\InvestigatorAvailabilityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: InvestigatorAvailabilityRepository::class)]
 #[ORM\Table(name: 'investigator_availability')]
 class InvestigatorAvailability extends AbstractAvailability
 {
