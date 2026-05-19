@@ -5,9 +5,14 @@ namespace App\Entities;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 
-trait AvaibilityTrait
+#[ORM\MappedSuperclass]
+abstract class AbstractAvailability
 {
-  
+  #[ORM\Id]
+  #[ORM\Column(type: 'integer')]
+  #[ORM\GeneratedValue]
+  private int|null $id = null;
+
   #[ORM\Column(type: 'integer', name: 'day_of_week')]
   private int $dayOfWeek;
 
