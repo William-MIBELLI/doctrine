@@ -5,14 +5,11 @@ namespace App\Services;
 use App\Repositories\ShopAvailabilityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ShopAvailabilityService
+class ShopAvailabilityService extends AbstractAvailabilityService
 {
-  private ShopAvailabilityRepository $repository;
-  private EntityManagerInterface $entityManager;
 
   public function __construct(ShopAvailabilityRepository $repo, EntityManagerInterface $em)
   {
-    $this->repository = $repo;
-    $this->entityManager = $em;
+    parent::__construct($repo, $em);
   }
 }
