@@ -4,7 +4,8 @@
     "doctrine/dbal": "^4",
     "symfony/cache": "^7",
     "symfony/serializer-pack": "^1.4",
-    "bramus/router": "~1.6"
+    "bramus/router": "~1.6",
+    "rakit/validation": "^1.4"
   },
   "autoload": {
     "psr-4": {

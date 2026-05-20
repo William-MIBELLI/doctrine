@@ -12,7 +12,7 @@ class ShopRepository extends EntityRepository
    */
   public function getAllShops(): array
   {
-    return parent::findAll();
+    return $this->findAll();
   }
 
   /**
@@ -22,12 +22,12 @@ class ShopRepository extends EntityRepository
    */
   public function getShopByCountry(string $country): array
   {
-    return parent::findBy(['country' => $country], ['id' => 'ASC']);
+    return $this->findBy(['country' => $country], ['id' => 'ASC']);
   }
 
   public function getShopById(string $id): Shop | null
   {
-    return parent::findOneBy(['id' => $id]);
+    return $this->findOneBy(['id' => $id]);
   }
 
 }

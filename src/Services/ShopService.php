@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\DTO\CreateShopDTO;
 use App\DTO\ShopDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repositories\ShopRepository;
-use DateTime;
 use App\Entities\Shop;
+use DateTime;
 
 class ShopService
 {
@@ -19,13 +20,9 @@ class ShopService
     $this->entityManager = $em;
   }
 
-  public function getAllShops()
+  private function mapShopToDTO(Shop $shop): ShopDTO
   {
-    $shops =  $this->shopRepository->getAllShops();
-    $dtos = [];
-
-    foreach ($shops as $shop){
-      $dtos[] = new ShopDTO(
+    $shopDTO = new ShopDTO(
         $shop->getId(),
         $shop->getPlaceName(),
         $shop->getPlaceCode(),
@@ -47,10 +44,42 @@ class ShopService
         $shop->getCanBeAfternoon(),
         $shop->getCreatedAt()->format('c')
       );
+    
+      return $shopDTO;
+  }
+
+  public function getAllShops()
+  {
+    $shops =  $this->shopRepository->getAllShops();
+    $dtos = [];
+
+    foreach ($shops as $shop){
+      $dtos[] = $this->mapShopToDTO($shop);
 
     }
 
     return $dtos;
   }
 
+  public function getShopById(string $id): ShopDTO | null
+  {
+    $shop = $this->shopRepository->getShopById($id);
+
+    if (!$shop){
+      return null;
+    }
+
+    $shopDTO = $this->mapShopToDTO($shop);
+
+    return $shopDTO;
+  }
+
+  public function createShop(CreateShopDTO $createShopDTO): ShopDTO
+  {
+    $shop = new Shop(...(array) $createShopDTO);
+    $this->entityManager->persist($shop);
+    $this->entityManager->flush();
+    $shopDTO = $this->mapShopToDTO($shop);
+    return $shopDTO;
+  }
 }

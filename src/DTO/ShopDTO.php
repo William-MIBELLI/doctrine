@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-readonly class ShopDTO
+readonly class ShopDTO extends CreateShopDTO
 {
     public function __construct(
         public ?int $id,
