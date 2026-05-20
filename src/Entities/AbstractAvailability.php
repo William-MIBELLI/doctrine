@@ -13,17 +13,14 @@ abstract class AbstractAvailability
   #[ORM\GeneratedValue]
   private int|null $id = null;
 
-  public function __construct(
-    #[ORM\Column(type: 'integer', name: 'day_of_week')]
-    private int $dayOfWeek,
+  #[ORM\Column(type: 'integer', name: 'day_of_week')]
+  private int $dayOfWeek;
 
-    #[ORM\Column(type: 'time', name: 'open_time')]
-    private DateTime $openTime,
+  #[ORM\Column(type: 'time', name: 'open_time')]
+  private DateTime $openTime;
 
-    #[ORM\Column(type: 'time', name: 'close_time')]
-    private DateTime $closeTime,
-
-  ) {}
+  #[ORM\Column(type: 'time', name: 'close_time')]
+  private DateTime $closeTime;
 
   public function getId(): ?int
   {
@@ -44,4 +41,19 @@ abstract class AbstractAvailability
   {
     return $this->closeTime;
   }
+
+
+	public function setCloseTime(DateTime $value) {
+		$this->closeTime = $value;
+	}
+
+
+	public function setOpenTime(DateTime $value) {
+		$this->openTime = $value;
+	}
+
+
+	public function setDayOfWeek(int $value) {
+		$this->dayOfWeek = $value;
+	}
 }

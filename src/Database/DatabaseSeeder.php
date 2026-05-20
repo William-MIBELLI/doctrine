@@ -6,6 +6,7 @@ use App\Services\InvestigatorService;
 use App\Services\ShopService;
 use Doctrine\ORM\EntityManagerInterface;
 use DateTime;
+
 use App\Entities\Shop;
 use App\Entities\Investigator;
 use App\Repositories\InvestigatorRepository;
@@ -23,21 +24,22 @@ class DatabaseSeeder
     private InvestigatorRepository $investigatorRepo,
     private ShopAvailabilityService $shopAvailabilityService,
     private InvestigatorAvailabilityService $investigatorAvailabilityService,
-  ) {}
+  ) {
+  }
 
   public function run(): void
   {
     $this->seedShopFromCSV();
     $shops = $this->shopRepo->getAllShops();
 
-    foreach ($shops as $shop){
+    foreach ($shops as $shop) {
       $this->shopAvailabilityService->generateAndSaveRandomPlanning($shop);
     }
 
     $this->seedInvestigatorFromCSV();
     $investigators = $this->investigatorRepo->getAllInvestigators();
 
-    foreach ($investigators as $investigator){
+    foreach ($investigators as $investigator) {
       $this->investigatorAvailabilityService->generateAndSaveRandomPlanning($investigator);
     }
   }
@@ -70,7 +72,7 @@ class DatabaseSeeder
       $skipped = fgetcsv($handler, null, ";", "\"", "\\");
 
       while (($rowData = fgetcsv($handler, null, ';', "\"", "\\")) !== false) {
-        if (count($headers) === count($rowData)) {
+        if (\count($headers) === \count($rowData)) {
           $csvData[] = array_combine($headers, $rowData);
         }
       }
@@ -109,11 +111,31 @@ class DatabaseSeeder
 
         unset($row['comments']);
 
-        $shop = new Shop(...$row);
+        $shop = new Shop();
+        $shop->setPlaceCode($row['placeCode']);
+        $shop->setPlaceName($row['placeName']);
+        $shop->setAddress($row['address']);
+        $shop->setPostalCode($row['postalCode']);
+        $shop->setCity($row['city']);
+        $shop->setCountry($row['country']);
+        $shop->setPhone($row['phone'] ?? null);
+        $shop->setVisitCode($row['visitCode']);
+        $shop->setVisitName($row['visitName']);
+        $shop->setStartDate($row['startDate']);
+        $shop->setEndDate($row['endDate']);
+        $shop->setType($row['type']);
+        $shop->setCost($row['cost']);
+        $shop->setLat($row['lat']);
+        $shop->setLng($row['lng']);
+
+        $shop->setCanBeLunchBreak($row['canBeLunchBreak'] ?? false);
+        $shop->setCanBeMorning($row['canBeMorning'] ?? false);
+        $shop->setCanBeAfternoon($row['canBeAfternoon'] ?? false);
+
         $this->entityManager->persist($shop);
         $i++;
 
-        if ($i % $bacthSize === 0){
+        if ($i % $bacthSize === 0) {
           $this->entityManager->flush();
           $this->entityManager->clear();
         }
@@ -166,7 +188,19 @@ class DatabaseSeeder
 
         unset($data['id']);
 
-        $investigator = new Investigator(...$data);
+        $investigator = new Investigator();
+        
+        $investigator->setCode($data['code']);
+        $investigator->setFirstname($data['firstname']);
+        $investigator->setLastname($data['lastname']);
+        $investigator->setAddress($data['address']);
+        $investigator->setPostalCode($data['postalCode']);
+        $investigator->setCity($data['city']);
+        $investigator->setCountry($data['country']);
+        $investigator->setPhone($data['phone']);
+        $investigator->setLat($data['lat']);
+        $investigator->setLng($data['lng']);
+
         $this->entityManager->persist($investigator);
         $i++;
 

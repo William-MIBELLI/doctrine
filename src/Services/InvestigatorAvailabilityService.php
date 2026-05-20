@@ -21,11 +21,12 @@ class InvestigatorAvailabilityService extends AbstractAvailabilityService
     $planning = $this->generateRandomWeekPlanning();
 
     foreach ($planning as $plan) {
-      $avail = new InvestigatorAvailability(
-        dayOfWeek: $plan->dayOfWeek,
-        openTime: new DateTime($plan->openTime),
-        closeTime: new DateTime($plan->closeTime)
-      );
+      
+      $avail = new InvestigatorAvailability();
+
+      $avail->setDayOfWeek($plan->dayOfWeek);
+      $avail->setOpenTime(new DateTime($plan->openTime));
+      $avail->setCloseTime(new Datetime($plan->closeTime));
       $avail->setInvestigator($investigator);
 
       $this->entityManager->persist($avail);

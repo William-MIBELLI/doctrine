@@ -21,11 +21,12 @@ class ShopAvailabilityService extends AbstractAvailabilityService
     $planning = $this->generateRandomWeekPlanning();
 
     foreach ($planning as $plan) {
-      $avail = new ShopAvailability(
-        dayOfWeek: $plan->dayOfWeek,
-        openTime: new DateTime($plan->openTime),
-        closeTime: new DateTime($plan->closeTime)
-      );
+
+      $avail = new ShopAvailability();
+      
+      $avail->setDayOfWeek($plan->dayOfWeek);
+      $avail->setOpenTime(new DateTime($plan->openTime));
+      $avail->setCloseTime(new Datetime($plan->closeTime));
       $avail->setShop($shop);
 
       $this->entityManager->persist($avail);
