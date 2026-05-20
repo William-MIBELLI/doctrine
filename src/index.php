@@ -6,7 +6,7 @@ use App\Controllers\InvestigatorAvailabilityController;
 use App\Controllers\ShopAvailabilityController;
 use App\Entities\Investigator;
 use App\Entities\Shop;
-use App\Routes\Router;
+use App\Routes\AppRouter;
 use App\Services\InvestigatorAvailabilityService;
 use App\Services\InvestigatorService;
 use App\Services\ShopAvailabilityService;
@@ -34,16 +34,5 @@ $investigatorAvaibilityRepository = $entityManager->getRepository(InvestigatorAv
 $investigatorAvailabilityService = new InvestigatorAvailabilityService($investigatorAvaibilityRepository, $entityManager);
 $investigatorAvailabilityController = new InvestigatorAvailabilityController($investigatorAvailabilityService);
 
-$router = new Router();
-
-$router->addRoute("GET", '/shops', $shopController, 'list');
-$router->addRoute("POST", '/shops', $investigatorController, 'create');
-$router->addRoute("DELETE", '/shops/id', $investigatorController, 'delete');
-
-
-$router->addRoute("GET", '/investigators', $investigatorController, 'list');
-$router->addRoute("POST", '/investigators', $investigatorController, 'create');
-$router->addRoute("DELETE", '/investigators/id', $investigatorController, 'delete');
-
-
-$router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+$router = new AppRouter($shopController, $investigatorController);
+$router->run();
