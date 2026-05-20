@@ -4,7 +4,7 @@ namespace App\DTO;
 
 use Webmozart\Assert\Assert;
 
-readonly class CreateShopDTO
+readonly class SaveShopDTO
 {
   
   public function __construct(

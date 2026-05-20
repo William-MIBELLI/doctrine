@@ -21,18 +21,34 @@ class ShopController extends AbstractController
     $this->json($shopsDTO, 200);
   }
 
-  public function getById(string $id): ShopDTO | null
+  public function show(string $id): ShopDTO | null
   {
-    $shop = $this->shopService->getShopById($id);
+    $shop = $this->shopService->getShopDetails($id);
     return $shop;
   }
 
   public function create()
   {
-    $createdDTO = ShopValidation::validateCreate();
+    $createdDTO = ShopValidation::validateInputAndGetDTO();
 
     $shop = $this->shopService->createShop($createdDTO);
 
     $this->json($shop, 201);
+  }
+
+  public function delete(string $id)
+  {
+    $isDeleted = $this->shopService->deleteStore($id);
+
+    echo "Shop {$id} is deleted : {$isDeleted}";
+  }
+
+  public function update(string $id)
+  {
+    $dto = ShopValidation::validateInputAndGetDTO();
+
+    $isUpdated = $this->shopService->updateShop($id, $dto);
+
+    echo "Shop {$id} is updated : {$isUpdated}";
   }
 }

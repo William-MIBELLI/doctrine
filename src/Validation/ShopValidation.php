@@ -2,18 +2,18 @@
 
 namespace App\Validation;
 
-use App\DTO\CreateShopDTO;
+use App\DTO\SaveShopDTO;
 use InvalidArgumentException;
 
 class ShopValidation
 {
-  public static function validateCreate()
+  public static function validateInputAndGetDTO()
   {
     $payload = json_decode(file_get_contents("php://input"), true) ?? $_POST;
 
     try {
 
-      return new CreateShopDTO(...$payload);
+      return new SaveShopDTO(...$payload);
       
     } catch (InvalidArgumentException $e) {
 
@@ -28,5 +28,4 @@ class ShopValidation
     }
   }
 
-  public static function validateUpdate() {}
 }

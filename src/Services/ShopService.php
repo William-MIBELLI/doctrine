@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\DTO\CreateShopDTO;
+use App\DTO\SaveShopDTO;
 use App\DTO\ShopDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repositories\ShopRepository;
@@ -23,37 +23,61 @@ class ShopService
   private function mapShopToDTO(Shop $shop): ShopDTO
   {
     $shopDTO = new ShopDTO(
-        $shop->getId(),
-        $shop->getPlaceName(),
-        $shop->getPlaceCode(),
-        $shop->getAddress(),
-        $shop->getPostalCode(),
-        $shop->getCity(),
-        $shop->getCountry(),
-        $shop->getPhone(),
-        $shop->getVisitCode(),
-        $shop->getVisitName(),
-        $shop->getStartDate() ? $shop->getStartDate()->format('c') : null,
-        $shop->getEndDate() ? $shop->getEndDate()->format('c') : null,
-        $shop->getType(),
-        $shop->getCost(),
-        $shop->getLat(),
-        $shop->getLng(),
-        $shop->getCanBeLunchBreak(),
-        $shop->getCanBeMorning(),
-        $shop->getCanBeAfternoon(),
-        $shop->getCreatedAt()->format('c')
-      );
+      $shop->getId(),
+      $shop->getPlaceName(),
+      $shop->getPlaceCode(),
+      $shop->getAddress(),
+      $shop->getPostalCode(),
+      $shop->getCity(),
+      $shop->getCountry(),
+      $shop->getPhone(),
+      $shop->getVisitCode(),
+      $shop->getVisitName(),
+      $shop->getStartDate() ? $shop->getStartDate()->format('c') : null,
+      $shop->getEndDate() ? $shop->getEndDate()->format('c') : null,
+      $shop->getType(),
+      $shop->getCost(),
+      $shop->getLat(),
+      $shop->getLng(),
+      $shop->getCanBeLunchBreak(),
+      $shop->getCanBeMorning(),
+      $shop->getCanBeAfternoon(),
+      $shop->getCreatedAt()->format('c')
+    );
+
+    return $shopDTO;
+  }
+
+  private function setShopFromDTO(Shop $shop, SaveShopDTO $dto): void
+  {
     
-      return $shopDTO;
+    $shop->setPlaceCode($dto->placeCode);
+    $shop->setPlaceName($dto->placeName);
+    $shop->setAddress($dto->address);
+    $shop->setPostalCode($dto->postalCode);
+    $shop->setCity($dto->city);
+    $shop->setCountry($dto->country);
+    $shop->setPhone($dto->phone ?? null);
+    $shop->setVisitCode($dto->visitCode);
+    $shop->setVisitName($dto->visitName);
+    $shop->setStartDate($dto->startDate ? new DateTime($dto->startDate) : null);
+    $shop->setEndDate($dto->endDate ? new DateTime($dto->endDate) : null);
+    $shop->setType($dto->type);
+    $shop->setCost($dto->cost);
+    $shop->setLat($dto->lat);
+    $shop->setLng($dto->lng);
+    $shop->setCanBeLunchBreak($dto->canBeLunchBreak ?? false);
+    $shop->setCanBeMorning($dto->canBeMorning ?? false);
+    $shop->setCanBeAfternoon($dto->canBeAfternoon ?? false);
+
   }
 
   public function getAllShops()
   {
-    $shops =  $this->shopRepository->getAllShops();
+    $shops = $this->shopRepository->findAllShops();
     $dtos = [];
 
-    foreach ($shops as $shop){
+    foreach ($shops as $shop) {
       $dtos[] = $this->mapShopToDTO($shop);
 
     }
@@ -61,11 +85,11 @@ class ShopService
     return $dtos;
   }
 
-  public function getShopById(string $id): ShopDTO | null
+  public function getShopDetails(string $id): ShopDTO|null
   {
-    $shop = $this->shopRepository->getShopById($id);
+    $shop = $this->shopRepository->findShopById($id);
 
-    if (!$shop){
+    if (!$shop) {
       return null;
     }
 
@@ -74,12 +98,46 @@ class ShopService
     return $shopDTO;
   }
 
-  public function createShop(CreateShopDTO $createShopDTO): ShopDTO
+  public function createShop(SaveShopDTO $dto): ShopDTO
   {
-    $shop = new Shop(...(array) $createShopDTO);
+
+    $shop = new Shop();
+    $this->setShopFromDTO($shop, $dto);
+
     $this->entityManager->persist($shop);
     $this->entityManager->flush();
+
     $shopDTO = $this->mapShopToDTO($shop);
+
     return $shopDTO;
+  }
+
+  public function deleteStore(string $id): bool
+  {
+    $shop = $this->shopRepository->findShopById($id);
+
+    if (!$shop){
+      return false;
+    }
+
+    $this->entityManager->remove($shop);
+    $this->entityManager->flush();
+
+    return true;
+  }
+
+  public function updateShop(string $id, SaveShopDTO $dto)
+  {
+    $shop = $this->shopRepository->findShopById($id);
+
+    if (!$shop) {
+      return false;
+    }
+
+    $this->setShopFromDTO($shop, $dto);
+
+    $this->entityManager->flush();
+
+    return true;
   }
 }
