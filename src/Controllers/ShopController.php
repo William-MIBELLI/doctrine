@@ -18,13 +18,13 @@ class ShopController extends AbstractController
   public function list()
   {
     $shopsDTO = $this->shopService->getAllShops();
-    $this->json($shopsDTO, 200);
+    $this->JSONResponse($shopsDTO, 200);
   }
 
-  public function show(string $id): ShopDTO | null
+  public function show(string $id)
   {
     $shop = $this->shopService->getShopDetails($id);
-    return $shop;
+    $this->JSONResponse($shop, 200);
   }
 
   public function create()
@@ -33,14 +33,14 @@ class ShopController extends AbstractController
 
     $shop = $this->shopService->createShop($createdDTO);
 
-    $this->json($shop, 201);
+    $this->JSONResponse($shop, 201);
   }
 
   public function delete(string $id)
   {
     $isDeleted = $this->shopService->deleteStore($id);
 
-    echo "Shop {$id} is deleted : {$isDeleted}";
+    $this->JSONResponse(null, 204);
   }
 
   public function update(string $id)
@@ -49,6 +49,6 @@ class ShopController extends AbstractController
 
     $isUpdated = $this->shopService->updateShop($id, $dto);
 
-    echo "Shop {$id} is updated : {$isUpdated}";
+    $this->JSONResponse(null, 201);
   }
 }
