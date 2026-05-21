@@ -36,7 +36,7 @@ class AppRouter
         
         $this->router->mount("/shops", function () use ($shopController) {
             $this->router->get('/', [$shopController, 'list']);
-            $this->router->get('/{id}', [$shopController, 'getById']);
+            $this->router->get('/{id}', [$shopController, 'show']);
             $this->router->post('/', [$shopController, 'create']);
             $this->router->delete('/{id}', [$shopController, 'delete']);
             $this->router->put('/{id}', [$shopController, 'update']);

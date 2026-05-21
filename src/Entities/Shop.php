@@ -87,6 +87,10 @@ class Shop
         return $this->id;
     }
 
+    /**
+     * Summary of getAvailabilities
+     * @return Collection|ShopAvailability[]
+     */
     public function getAvailabilities(): Collection
     {
         return $this->availabilities;
