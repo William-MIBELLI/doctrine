@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\AvailabilityDTO;
 use App\DTO\SaveShopDTO;
 use App\DTO\ShopDTO;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,29 +22,42 @@ class ShopService
     $this->entityManager = $em;
   }
 
-  private function mapShopToDTO(Shop $shop): ShopDTO
+  private function mapShopToDTO(Shop $shop, bool $withAvailabilities = false): ShopDTO
   {
+    $availabilitiesDTO = [];
+    if ($withAvailabilities) {
+      foreach ($shop->getAvailabilities() as $avail) {
+        $availabilitiesDTO[] = new AvailabilityDTO(
+          id: $avail->getId(),
+          dayOfWeek: $avail->getDayOfWeek(),
+          openTime: $avail->getOpenTime()->format('H:i'),
+          closeTime: $avail->getCloseTime()->format('H:i')
+        );
+      }
+    }
+
     $shopDTO = new ShopDTO(
-      $shop->getId(),
-      $shop->getPlaceName(),
-      $shop->getPlaceCode(),
-      $shop->getAddress(),
-      $shop->getPostalCode(),
-      $shop->getCity(),
-      $shop->getCountry(),
-      $shop->getPhone(),
-      $shop->getVisitCode(),
-      $shop->getVisitName(),
-      $shop->getStartDate() ? $shop->getStartDate()->format('c') : null,
-      $shop->getEndDate() ? $shop->getEndDate()->format('c') : null,
-      $shop->getType(),
-      $shop->getCost(),
-      $shop->getLat(),
-      $shop->getLng(),
-      $shop->getCanBeLunchBreak(),
-      $shop->getCanBeMorning(),
-      $shop->getCanBeAfternoon(),
-      $shop->getCreatedAt()->format('c')
+      id: $shop->getId(),
+      placeName: $shop->getPlaceName(),
+      placeCode: $shop->getPlaceCode(),
+      address: $shop->getAddress(),
+      postalCode: $shop->getPostalCode(),
+      city: $shop->getCity(),
+      country: $shop->getCountry(),
+      phone: $shop->getPhone(),
+      visitCode: $shop->getVisitCode(),
+      visitName: $shop->getVisitName(),
+      startDate: $shop->getStartDate() ? $shop->getStartDate()->format('c') : null,
+      endDate: $shop->getEndDate() ? $shop->getEndDate()->format('c') : null,
+      type: $shop->getType(),
+      cost: $shop->getCost(),
+      lat: $shop->getLat(),
+      lng: $shop->getLng(),
+      canBeLunchBreak: $shop->getCanBeLunchBreak(),
+      canBeMorning: $shop->getCanBeMorning(),
+      canBeAfternoon: $shop->getCanBeAfternoon(),
+      createdAt: $shop->getCreatedAt()->format('c'),
+      availabilities: $availabilitiesDTO
     );
 
     return $shopDTO;
@@ -73,7 +87,11 @@ class ShopService
 
   }
 
-  public function getAllShops()
+  /**
+   * Summary of getAllShops
+   * @return ShopDTO[]
+   */
+  public function getAllShops(): array
   {
     $shops = $this->shopRepository->findAllShops();
     $dtos = [];
@@ -91,10 +109,10 @@ class ShopService
     $shop = $this->shopRepository->findShopById($id);
 
     if (!$shop) {
-      throw new Exception('Unable to retrieve shop with this id', 400);
+      throw new Exception('Unable to retrieve shop with this id', 404);
     }
 
-    $shopDTO = $this->mapShopToDTO($shop);
+    $shopDTO = $this->mapShopToDTO($shop, true);
 
     return $shopDTO;
   }
@@ -118,7 +136,7 @@ class ShopService
     $shop = $this->shopRepository->findShopById($id);
 
     if (!$shop) {
-      throw new Exception("Unable to delete this shop", code: 400);
+      throw new Exception("Unable to delete this shop", code: 404);
     }
 
     $this->entityManager->remove($shop);
@@ -131,7 +149,7 @@ class ShopService
     $shop = $this->shopRepository->findShopById($id);
 
     if (!$shop) {
-      throw new Exception("Unable to update this shop", code: 400);
+      throw new Exception("Unable to update this shop", code: 404);
     }
 
     $this->setShopFromDTO($shop, $dto);

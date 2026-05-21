@@ -24,6 +24,9 @@ readonly class ShopDTO
         public bool $canBeLunchBreak,
         public bool $canBeMorning,
         public bool $canBeAfternoon,
-        public string $createdAt
+        public string $createdAt,
+
+        /** @var AvailabilityDTO[] */
+        public array $availabilities = []
     ) {}
 }
