@@ -46,7 +46,7 @@ class AppRouter
         
         $this->router->mount('/investigators', function () use ($investigatorController) {
             $this->router->get('/', [$investigatorController, 'list']);
-            $this->router->get('/{id}', [$investigatorController, 'getById']);
+            $this->router->get('/{id}', [$investigatorController, 'show']);
             $this->router->post('/', [$investigatorController, 'create']);
             $this->router->delete('/{id}', [$investigatorController, 'delete']);
             $this->router->put('/{id}', [$investigatorController, 'update']);
