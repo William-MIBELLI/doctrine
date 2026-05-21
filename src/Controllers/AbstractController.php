@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\ValidationException;
+use Throwable;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -26,7 +28,8 @@ abstract class AbstractController
 
     $body = [
       'status' => 'success',
-      'data' => $data
+      'data' => $data,
+      'errors' => null
     ];
 
     $jsonResponse = $this->json($body);
@@ -34,18 +37,24 @@ abstract class AbstractController
     echo $jsonResponse;
   }
 
-  protected function ErrorResponse(string $message, int $statusCode = 404)
+  protected function ErrorResponse(Throwable $e)
   {
+    $code = $e->getCode();
+    $statusCode = (is_numeric($code) && $code >= 100 && $code <= 599) ? (int)$code : 500;
+
     http_response_code($statusCode);
     header('Content-Type: application/json');
 
+    $errorContent = $e instanceof ValidationException
+      ? $e->getErrors()
+      : $e->getMessage();
+
     $body = [
       'status' => 'error',
-      'message' => $message
+      'data' => null,
+      'errors' => $errorContent
     ];
 
-    $jsonResponse = $this->json($body);
-
-    echo $jsonResponse;
+    echo $this->json($body);
   }
 }

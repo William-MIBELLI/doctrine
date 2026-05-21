@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repositories\ShopRepository;
 use App\Entities\Shop;
 use DateTime;
+use Exception;
 
 class ShopService
 {
@@ -50,7 +51,7 @@ class ShopService
 
   private function setShopFromDTO(Shop $shop, SaveShopDTO $dto): void
   {
-    
+
     $shop->setPlaceCode($dto->placeCode);
     $shop->setPlaceName($dto->placeName);
     $shop->setAddress($dto->address);
@@ -90,7 +91,7 @@ class ShopService
     $shop = $this->shopRepository->findShopById($id);
 
     if (!$shop) {
-      return null;
+      throw new Exception('Unable to retrieve shop with this id', 400);
     }
 
     $shopDTO = $this->mapShopToDTO($shop);
@@ -112,32 +113,33 @@ class ShopService
     return $shopDTO;
   }
 
-  public function deleteStore(string $id): bool
+  public function deleteStore(string $id): void
   {
     $shop = $this->shopRepository->findShopById($id);
 
-    if (!$shop){
-      return false;
+    if (!$shop) {
+      throw new Exception("Unable to delete this shop", code: 400);
     }
 
     $this->entityManager->remove($shop);
     $this->entityManager->flush();
 
-    return true;
   }
 
-  public function updateShop(string $id, SaveShopDTO $dto)
+  public function updateShop(string $id, SaveShopDTO $dto): ShopDTO
   {
     $shop = $this->shopRepository->findShopById($id);
 
     if (!$shop) {
-      return false;
+      throw new Exception("Unable to update this shop", code: 400);
     }
 
     $this->setShopFromDTO($shop, $dto);
-
     $this->entityManager->flush();
 
-    return true;
+    $shopDTO = $this->mapShopToDTO($shop);
+
+    return $shopDTO;
+
   }
 }

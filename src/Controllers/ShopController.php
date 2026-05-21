@@ -2,14 +2,17 @@
 
 namespace App\Controllers;
 
+use App\DTO\SaveShopDTO;
 use App\DTO\ShopDTO;
 use App\Services\ShopService;
 use App\Validation\ShopValidation;
+use Exception;
+use Throwable;
 
 class ShopController extends AbstractController
 {
   private ShopService $shopService;
-  
+
   public function __construct(ShopService $service)
   {
     $this->shopService = $service;
@@ -17,38 +20,63 @@ class ShopController extends AbstractController
 
   public function list()
   {
-    $shopsDTO = $this->shopService->getAllShops();
-    $this->JSONResponse($shopsDTO, 200);
+    try {
+      $shopsDTO = $this->shopService->getAllShops();
+      $this->JSONResponse($shopsDTO, 200);
+    } catch (Throwable $e) {
+      $this->ErrorResponse($e);
+    }
   }
 
   public function show(string $id)
   {
-    $shop = $this->shopService->getShopDetails($id);
-    $this->JSONResponse($shop, 200);
+    try {
+      $shop = $this->shopService->getShopDetails($id);
+      $this->JSONResponse($shop, 200);
+    } catch (Throwable $e) {
+      $this->ErrorResponse($e);
+    }
   }
 
   public function create()
   {
-    $createdDTO = ShopValidation::validateInputAndGetDTO();
+    try {
+      $payload = json_decode(file_get_contents("php://input"), true) ?? [];
+      ShopValidation::validateInput($payload);
 
-    $shop = $this->shopService->createShop($createdDTO);
+      $createdDTO = new SaveShopDTO(...$payload);
 
-    $this->JSONResponse($shop, 201);
+      $shop = $this->shopService->createShop($createdDTO);
+      $this->JSONResponse($shop, 201);
+
+    } catch (Throwable $e) {
+      $this->ErrorResponse($e);
+    }
   }
 
   public function delete(string $id)
   {
-    $isDeleted = $this->shopService->deleteStore($id);
-
-    $this->JSONResponse(null, 204);
+    try {
+      $this->shopService->deleteStore($id);
+      $this->JSONResponse(null, 204);
+    } catch (Throwable $e) {
+      $this->ErrorResponse($e);
+    }
   }
 
   public function update(string $id)
   {
-    $dto = ShopValidation::validateInputAndGetDTO();
+    try {
+      $payload = json_decode(file_get_contents("php://input"), true) ?? [];
+      ShopValidation::validateInput($payload);
 
-    $isUpdated = $this->shopService->updateShop($id, $dto);
+      $dto = new SaveShopDTO(...$payload);
 
-    $this->JSONResponse(null, 201);
+      $shop = $this->shopService->updateShop($id, $dto);
+      $this->JSONResponse($shop, 201);
+
+    } catch (Throwable $e) {
+      $this->ErrorResponse($e);
+    }
   }
 }

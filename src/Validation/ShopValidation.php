@@ -3,29 +3,43 @@
 namespace App\Validation;
 
 use App\DTO\SaveShopDTO;
+use App\Exceptions\ValidationException;
+use Exception;
 use InvalidArgumentException;
+use Rakit\Validation\Validator;
 
 class ShopValidation
 {
-  public static function validateInputAndGetDTO()
+  public static function validateInput(array $payload)
   {
-    $payload = json_decode(file_get_contents("php://input"), true) ?? $_POST;
+    $validator = new Validator();
 
-    try {
+    $validation = $validator->make($payload, [
+      'placeName' => 'required',
+      'placeCode' => 'required',
+      'address' => 'required',
+      'postalCode' => 'required|digits:5',
+      'city' => 'required',
+      'country' => 'required',
+      'phone' => 'nullable|numeric',
+      'visitCode' => 'required',
+      'visitName' => 'required',
+      'startDate' => 'nullable',
+      'endDate' => 'nullable',
+      'type' => 'required',
+      'cost' => 'required|numeric',
+      'lat' => 'required|numeric|min:-90|max:90',
+      'lng' => 'required|numeric|min:-180|max:180',
+      'canBeLunchBreak' => 'required|boolean',
+      'canBeMorning' => 'required|boolean',
+      'canBeAfternoon' => 'required|boolean'
+    ]);
+    $validation->validate();
 
-      return new SaveShopDTO(...$payload);
-      
-    } catch (InvalidArgumentException $e) {
+    if ($validation->fails()) {
+      $errors = $validation->errors()->firstOfAll();
 
-      header('HTTP/1.1 400 Bad Request');
-      header('Content-Type: application/json');
-      echo json_encode([
-        'status' => 'error',
-        'message' => $e->getMessage()
-      ]);
-
-      exit();
+      throw new ValidationException($errors);
     }
   }
-
 }
