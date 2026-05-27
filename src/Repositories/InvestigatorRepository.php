@@ -11,12 +11,12 @@ class InvestigatorRepository extends EntityRepository
    * Summary of getAllInvestigators
    * @return Investigator[]
    */
-  public function getAllInvestigators(): array
+  public function findAllInvestigators(): array
   {
     return $this->findAll();
   }
 
-  public function getInvestigatorById(string $id): Investigator | null
+  public function findInvestigatorById(string $id): Investigator | null
   {
     return $this->findOneBy(['id' => $id]);
   }
@@ -26,7 +26,7 @@ class InvestigatorRepository extends EntityRepository
    * @param array $cities
    * @return Investigator[]|null
    */
-  public function getInvestigatorByLocations(array $cities): array | null
+  public function findInvestigatorByLocations(array $cities): array | null
   {
     return $this->find(['city' => $cities]);
   }

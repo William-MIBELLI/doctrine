@@ -68,6 +68,10 @@ class Investigator
         return $this->createdAt;
     }
 
+    /**
+     * Summary of getAvailabilities
+     * @return InvestigatorAvailability[]
+     */
     public function getAvailabilities(): Collection
     {
         return $this->availabilities;

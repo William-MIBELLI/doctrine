@@ -16,6 +16,9 @@ readonly class InvestigatorDTO
     public string $phone,
     public float $lat,
     public float $lng,
-    public string $createdAt
+    public string $createdAt,
+
+    /** @var AvailabilityDTO[] */
+    public array $availabilities = []
   ) {}
 }
