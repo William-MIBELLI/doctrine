@@ -24,26 +24,29 @@ readonly class SaveShopDTO
     public bool $canBeLunchBreak,
     public bool $canBeMorning,
     public bool $canBeAfternoon,
-    ) {
+    ) {}
 
-    // Assert::stringNotEmpty($placeName, "Place name must be provided.");
-    // Assert::integer($placeCode, "Place code must be provided.");
-    // Assert::stringNotEmpty($address, "Address must be provided");
-    // Assert::integer($postalCode);
-    // Assert::stringNotEmpty($city);
-    // Assert::stringNotEmpty($country);
-    // Assert::stringNotEmpty($visitCode);
-    // Assert::stringNotEmpty($visitName);
-    // Assert::stringNotEmpty($type);
-    // Assert::float($cost);
-    // Assert::float($lat);
-    // Assert::float($lng);
-    // Assert::boolean($canBeLunchBreak);
-    // Assert::boolean($canBeMorning);
-    // Assert::boolean($canBeAfternoon);
-
-    // Assert::nullOrString($phone);
-    // Assert::nullOrString($startDate);
-    // Assert::nullOrString($endDate);
-  }
+    public static function createFromArray(array $data): self
+    {
+      return new self(
+        placeName: $data['placeName'],
+        placeCode: $data['placeCode'],
+        address: $data['address'],
+        postalCode: (int) $data['postalCode'],
+        city: $data['city'],
+        country: $data['country'],
+        phone: $data['phone'] ?? null,
+        visitCode: $data['visitCode'],
+        visitName: $data['visitName'],
+        startDate: $data['startDate'] ?? null,
+        endDate: $data['endDate'] ?? null,
+        type: $data['type'],
+        cost: (float) $data['cost'],
+        lat: (float) $data['lat'],
+        lng: (float) $data['lng'],
+        canBeLunchBreak: (bool) $data['canBeLunchBreak'] ?? false,
+        canBeMorning: (bool) $data['canBeMorning'] ?? false,
+        canBeAfternoon: (bool) $data['canBeAfternoon'] ?? false,
+      );
+    }
 }

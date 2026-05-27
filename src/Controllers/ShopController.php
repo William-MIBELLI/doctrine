@@ -44,7 +44,7 @@ class ShopController extends AbstractController
       $payload = json_decode(file_get_contents("php://input"), true) ?? [];
       ShopValidation::validateInput($payload);
 
-      $createdDTO = new SaveShopDTO(...$payload);
+      $createdDTO = SaveShopDTO::createFromArray($payload);
 
       $shop = $this->shopService->createShop($createdDTO);
       $this->JSONResponse($shop, 201);
@@ -70,7 +70,7 @@ class ShopController extends AbstractController
       $payload = json_decode(file_get_contents("php://input"), true) ?? [];
       ShopValidation::validateInput($payload);
 
-      $dto = new SaveShopDTO(...$payload);
+      $dto = SaveShopDTO::createFromArray($payload);
 
       $shop = $this->shopService->updateShop($id, $dto);
       $this->JSONResponse($shop, 201);
