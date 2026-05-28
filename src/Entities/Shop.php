@@ -16,7 +16,7 @@ class Shop
     #[ORM\GeneratedValue]
     private int|null $id = null;
 
-    #[ORM\OneToMany(targetEntity: ShopAvailability::class, mappedBy: 'shop')]
+    #[ORM\OneToMany(targetEntity: ShopAvailability::class, mappedBy: 'shop', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $availabilities;
 
     #[ORM\Column(type: 'datetime', name: 'created_at', options: ['default' => 'CURRENT_TIMESTAMP'])]
@@ -25,8 +25,8 @@ class Shop
     #[ORM\Column(type: 'string', name: 'place_name')]
     private string $placeName;
 
-    #[ORM\Column(type: 'integer', unique: true, name: 'place_code')]
-    private int $placeCode;
+    #[ORM\Column(type: 'string', unique: true, name: 'place_code')]
+    private string $placeCode;
 
     #[ORM\Column(type: 'string')]
     private string $address;
@@ -41,7 +41,7 @@ class Shop
     private string $country;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    private string $phone;
+    private string | null $phone;
 
     #[ORM\Column(type: 'string', unique: true, name: 'visit_code')]
     private string $visitCode;
@@ -96,6 +96,14 @@ class Shop
         return $this->availabilities;
     }
 
+    public function addAvaibality(ShopAvailability $availability): self
+    {
+        $this->availabilities->add($availability);
+        $availability->setShop($this);
+
+        return $this;
+    }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
@@ -106,7 +114,7 @@ class Shop
         return $this->placeName;
     }
 
-    public function getPlaceCode(): int
+    public function getPlaceCode(): string
     {
         return $this->placeCode;
     }
@@ -131,7 +139,7 @@ class Shop
         return $this->country;
     }
 
-    public function getPhone(): string
+    public function getPhone(): string | null
     {
         return $this->phone;
     }
@@ -200,7 +208,7 @@ class Shop
     }
 
 
-    public function setPlaceCode(int $value)
+    public function setPlaceCode(string $value)
     {
         $this->placeCode = $value;
     }
@@ -230,7 +238,7 @@ class Shop
     }
 
 
-    public function setPhone(string $value)
+    public function setPhone(string | null $value)
     {
         $this->phone = $value;
     }

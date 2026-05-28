@@ -32,7 +32,11 @@ class ShopValidation
       'lng' => 'required|numeric|min:-180|max:180',
       'canBeLunchBreak' => 'required|boolean',
       'canBeMorning' => 'required|boolean',
-      'canBeAfternoon' => 'required|boolean'
+      'canBeAfternoon' => 'required|boolean',
+      'availabilities' => 'array',
+      'availabilities.*.dayOfWeek' => 'required|integer|between:1,7',
+      'availabilities.*.openTime' => 'required|date:H:i',
+      'availabilities.*.closeTime' => 'required|date:H:i'
     ]);
     $validation->validate();
 

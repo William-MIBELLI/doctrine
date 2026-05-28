@@ -9,6 +9,7 @@ use App\Repositories\ShopAvailabilityRepository;
 class ShopAvailability extends AbstractAvailability
 {
   #[ORM\ManyToOne(targetEntity: Shop::class, inversedBy: 'availabilities')]
+  #[ORM\JoinColumn(name: 'shop_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
   private Shop $shop;
 
   public function setShop(Shop $shop): static

@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class InvestigatorAvailability extends AbstractAvailability
 {
   #[ORM\ManyToOne(targetEntity: Investigator::class, inversedBy: 'availabilities')]
+  #[ORM\JoinColumn(name: 'investigator_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
   private Investigator $investigator;
 
   public function setInvestigator(Investigator $investigator): static

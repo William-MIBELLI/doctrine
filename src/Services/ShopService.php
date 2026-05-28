@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTO\AvailabilityDTO;
 use App\DTO\SaveShopDTO;
 use App\DTO\ShopDTO;
+use App\Entities\ShopAvailability;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repositories\ShopRepository;
 use App\Entities\Shop;
@@ -84,6 +85,19 @@ class ShopService
     $shop->setCanBeLunchBreak($dto->canBeLunchBreak ?? false);
     $shop->setCanBeMorning($dto->canBeMorning ?? false);
     $shop->setCanBeAfternoon($dto->canBeAfternoon ?? false);
+    $shop->getAvailabilities()->clear();
+
+    foreach ($dto->availabilitiesDTO as $availDTO) {
+
+      $avail = new ShopAvailability();
+
+      $avail->setShop($shop);
+      $avail->setDayOfWeek($availDTO->dayOfWeek);
+      $avail->setOpenTime(new DateTime($availDTO->openTime));
+      $avail->setCloseTime(new DateTime($availDTO->closeTime));
+
+      $shop->addAvaibality($avail);
+    }
 
   }
 
@@ -126,7 +140,7 @@ class ShopService
     $this->entityManager->persist($shop);
     $this->entityManager->flush();
 
-    $shopDTO = $this->mapShopToDTO($shop);
+    $shopDTO = $this->mapShopToDTO($shop, true);
 
     return $shopDTO;
   }

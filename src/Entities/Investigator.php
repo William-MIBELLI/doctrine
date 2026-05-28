@@ -19,7 +19,11 @@ class Investigator
     #[ORM\Column(type: 'datetime', name: 'created_at', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private DateTime $createdAt;
 
-    #[ORM\OneToMany(targetEntity: InvestigatorAvailability::class, mappedBy: 'investigator')]
+    #[ORM\OneToMany(
+        targetEntity: InvestigatorAvailability::class,
+        mappedBy: 'investigator',
+        cascade: ['persist', 'remove']
+    )]
     private Collection $availabilities;
 
     #[ORM\Column(type: 'string', unique: true)]
