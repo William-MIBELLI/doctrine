@@ -76,10 +76,19 @@ class Shop
     #[ORM\Column(type: 'boolean', name: 'can_be_afternoon', options: ['default' => false])]
     private bool $canBeAfternoon = false;
 
+    #[ORM\OneToMany(
+        targetEntity: Stop::class,
+        mappedBy: 'shop',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $stops;
+
     public function __construct()
     {
         $this->createdAt = new DateTime('now');
         $this->availabilities = new ArrayCollection();
+        $this->stops = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,7 +105,7 @@ class Shop
         return $this->availabilities;
     }
 
-    public function addAvaibality(ShopAvailability $availability): self
+    public function addAvailability(ShopAvailability $availability): self
     {
         $this->availabilities->add($availability);
         $availability->setShop($this);
@@ -308,4 +317,14 @@ class Shop
     {
         $this->canBeAfternoon = $value;
     }
+
+
+	public function getStops() : Collection {
+		return $this->stops;
+	}
+
+	public function addStop(Stop $stop) {
+        $this->stops->add($stop);
+        $stop->setShop($this);
+	}
 }
