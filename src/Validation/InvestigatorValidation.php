@@ -22,6 +22,10 @@ class InvestigatorValidation
       'phone' => 'required|numeric',
       'lat' => 'required|numeric|min:-90|max:90',
       'lng' => 'required|numeric|min:-180|max:180',
+      'availabilities' => 'array',
+      'availabilities.*.dayOfWeek' => 'required|integer|between:1,7',
+      'availabilities.*.openTime' => 'required|date:H:i',
+      'availabilities.*.closeTime' => 'required|date:H:i'
     ]);
 
     $validation->validate();

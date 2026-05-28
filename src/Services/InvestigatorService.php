@@ -5,6 +5,8 @@ namespace App\Services;
 use App\DTO\AvailabilityDTO;
 use App\DTO\InvestigatorDTO;
 use App\DTO\SaveInvestigatorDTO;
+use App\Entities\InvestigatorAvailability;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repositories\InvestigatorRepository;
 use App\Entities\Investigator;
@@ -69,6 +71,19 @@ class InvestigatorService
     $inv->setPhone($dto->phone);
     $inv->setLat($dto->lat);
     $inv->setLng($dto->lng);
+
+    $inv->getAvailabilities()->clear();
+
+    foreach ($dto->availabilities as $availDTO) {
+      $avail = new InvestigatorAvailability();
+
+      $avail->setDayOfWeek($availDTO->dayOfWeek);
+      $avail->setOpenTime(new DateTime($availDTO->openTime));
+      $avail->setCloseTime(new DateTime($availDTO->closeTime));
+      $avail->setInvestigator($inv);
+
+      $inv->addAvailability($avail);
+    }    
   }
 
   /**
@@ -110,7 +125,7 @@ class InvestigatorService
     $this->entityManager->persist($inv);
     $this->entityManager->flush();
 
-    $investigatorDTO = $this->mapInvestigatorToDTO($inv);
+    $investigatorDTO = $this->mapInvestigatorToDTO($inv, withAvailabilities:true);
 
     return $investigatorDTO;
   }
@@ -139,7 +154,7 @@ class InvestigatorService
 
     $this->entityManager->flush();
 
-    $updatedDTO = $this->mapInvestigatorToDTO($inv);
+    $updatedDTO = $this->mapInvestigatorToDTO($inv, withAvailabilities: true);
 
     return $updatedDTO;
   }

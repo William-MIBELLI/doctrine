@@ -22,7 +22,8 @@ class Investigator
     #[ORM\OneToMany(
         targetEntity: InvestigatorAvailability::class,
         mappedBy: 'investigator',
-        cascade: ['persist', 'remove']
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
     )]
     private Collection $availabilities;
 
@@ -79,6 +80,13 @@ class Investigator
     public function getAvailabilities(): Collection
     {
         return $this->availabilities;
+    }
+
+    public function addAvailability (InvestigatorAvailability $availability): self
+    {
+        $this->getAvailabilities()->add($availability);
+        $availability->setInvestigator($this);
+        return $this;
     }
 
     public function getCode(): string
@@ -191,9 +199,4 @@ class Investigator
         $this->code = $value;
     }
 
-
-    public function setAvailabilities(Collection $value)
-    {
-        $this->availabilities = $value;
-    }
 }

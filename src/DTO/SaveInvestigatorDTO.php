@@ -15,10 +15,22 @@ class SaveInvestigatorDTO
     public string $phone,
     public float $lat,
     public float $lng,
+
+    /** @var CreateAvailabilityDTO[] */
+    public array $availabilities = []
   ) {}
 
   public static function createFromArray(array $data): self
   {
+
+    $availabilitiesDTO = [];
+    
+    if (isset($data['availabilities']) && \is_array($data['availabilities'])) {
+      foreach ($data['availabilities'] as $avail) {
+        $availabilitiesDTO[] = CreateAvailabilityDTO::createFromArray($avail);
+      }
+    }
+
     return new self(
       code: $data['code'] ?? '',
       lastname: $data['lastname'] ?? '',
@@ -30,6 +42,7 @@ class SaveInvestigatorDTO
       phone: $data['phone'] ?? '',
       lat: (float)($data['lat'] ?? 0),
       lng: (float)($data['lng'] ?? 0),
+      availabilities: $availabilitiesDTO
     );
   }
 }
