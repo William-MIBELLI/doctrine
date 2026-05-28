@@ -57,10 +57,19 @@ class Investigator
     #[ORM\Column(type: 'float')]
     private float $lng;
 
+    #[ORM\OneToMany(
+        targetEntity: Circuit::class,
+        mappedBy: 'investigator',
+        orphanRemoval: true,
+        cascade: ['persist', 'remove']
+    )]
+    private Collection $circuits;
+
     public function __construct()
     {
         $this->createdAt = new DateTime('now');
         $this->availabilities = new ArrayCollection();
+        $this->circuits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,7 +91,7 @@ class Investigator
         return $this->availabilities;
     }
 
-    public function addAvailability (InvestigatorAvailability $availability): self
+    public function addAvailability(InvestigatorAvailability $availability): self
     {
         $this->getAvailabilities()->add($availability);
         $availability->setInvestigator($this);
@@ -199,4 +208,18 @@ class Investigator
         $this->code = $value;
     }
 
+    /**
+     * Summary of getCircuits
+     * @return Circuit[]
+     */
+    public function getCircuits(): Collection
+    {
+        return $this->circuits;
+    }
+
+    public function addCircuit(Circuit $circuit)
+    {
+        $this->circuits->add($circuit);
+        $circuit->setInvestigator($this);
+    }
 }

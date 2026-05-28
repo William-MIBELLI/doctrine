@@ -96,7 +96,7 @@ class ShopService
       $avail->setOpenTime(new DateTime($availDTO->openTime));
       $avail->setCloseTime(new DateTime($availDTO->closeTime));
 
-      $shop->addAvaibality($avail);
+      $shop->addAvailability($avail);
     }
 
   }
