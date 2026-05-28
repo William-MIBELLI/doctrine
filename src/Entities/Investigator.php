@@ -19,7 +19,12 @@ class Investigator
     #[ORM\Column(type: 'datetime', name: 'created_at', options: ['default' => 'CURRENT_TIMESTAMP'])]
     private DateTime $createdAt;
 
-    #[ORM\OneToMany(targetEntity: InvestigatorAvailability::class, mappedBy: 'investigator')]
+    #[ORM\OneToMany(
+        targetEntity: InvestigatorAvailability::class,
+        mappedBy: 'investigator',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $availabilities;
 
     #[ORM\Column(type: 'string', unique: true)]
@@ -75,6 +80,13 @@ class Investigator
     public function getAvailabilities(): Collection
     {
         return $this->availabilities;
+    }
+
+    public function addAvailability (InvestigatorAvailability $availability): self
+    {
+        $this->getAvailabilities()->add($availability);
+        $availability->setInvestigator($this);
+        return $this;
     }
 
     public function getCode(): string
@@ -187,9 +199,4 @@ class Investigator
         $this->code = $value;
     }
 
-
-    public function setAvailabilities(Collection $value)
-    {
-        $this->availabilities = $value;
-    }
 }

@@ -82,7 +82,6 @@ class DatabaseSeeder
     try {
       foreach ($csvData as $row) {
 
-        $row['placeCode'] = (int) $row['placeCode'];
         $row['postalCode'] = (int) $row['postalCode'];
         $row['phone'] = (int) $row['phone'];
         $row['lng'] = (float) $row['lng'];
