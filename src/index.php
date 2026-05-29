@@ -2,11 +2,14 @@
 
 require_once __DIR__ . '/bootstrap.php';
 
+use App\Controllers\CircuitController;
 use App\Controllers\InvestigatorAvailabilityController;
 use App\Controllers\ShopAvailabilityController;
+use App\Entities\Circuit;
 use App\Entities\Investigator;
 use App\Entities\Shop;
 use App\Routes\AppRouter;
+use App\Services\CircuitService;
 use App\Services\InvestigatorAvailabilityService;
 use App\Services\InvestigatorService;
 use App\Services\ShopAvailabilityService;
@@ -34,5 +37,9 @@ $investigatorAvaibilityRepository = $entityManager->getRepository(InvestigatorAv
 $investigatorAvailabilityService = new InvestigatorAvailabilityService($investigatorAvaibilityRepository, $entityManager);
 $investigatorAvailabilityController = new InvestigatorAvailabilityController($investigatorAvailabilityService);
 
-$router = new AppRouter($shopController, $investigatorController);
+$circuitRepository = $entityManager->getRepository(Circuit::class);
+$circuitService = new CircuitService($circuitRepository, $entityManager);
+$circuitController = new CircuitController($circuitService);
+
+$router = new AppRouter($shopController, $investigatorController, $circuitController);
 $router->run();
