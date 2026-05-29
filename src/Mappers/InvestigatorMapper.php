@@ -3,8 +3,11 @@
 namespace App\Mappers;
 
 use App\DTO\InvestigatorDTO;
+use App\DTO\SaveInvestigatorDTO;
 use App\Entities\Investigator;
 use App\DTO\AvailabilityDTO;
+use App\Entities\InvestigatorAvailability;
+use DateTime;
 
 class InvestigatorMapper
 {
@@ -44,5 +47,30 @@ class InvestigatorMapper
     );
 
     return $dto;
+  }
+
+  public function fromDTO(Investigator $inv, SaveInvestigatorDTO $dto): void
+  {
+    $inv->setCode($dto->code);
+    $inv->setLastname($dto->lastname);
+    $inv->setFirstname($dto->firstname);
+    $inv->setAddress($dto->address);
+    $inv->setPostalCode($dto->postalCode);
+    $inv->setCity($dto->city);
+    $inv->setCountry($dto->country);
+    $inv->setPhone($dto->phone);
+    $inv->setLat($dto->lat);
+    $inv->setLng($dto->lng);
+
+    $inv->getAvailabilities()->clear();
+
+    foreach ($dto->availabilities as $availDTO) {
+      
+      $avail = new InvestigatorAvailability();
+      $this->availabilityMapper->fromDTO($avail, $availDTO);
+      $avail->setInvestigator($inv);
+
+      $inv->addAvailability($avail);
+    }
   }
 }

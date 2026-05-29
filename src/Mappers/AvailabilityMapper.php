@@ -2,7 +2,9 @@
 
 namespace App\Mappers;
 
+use DateTime;
 use App\DTO\AvailabilityDTO;
+use App\DTO\CreateAvailabilityDTO;
 use App\Entities\Interfaces\AvailabilityInterface;
 
 
@@ -18,5 +20,12 @@ class AvailabilityMapper
       closeTime: $avail->getCloseTime()->format('H:i')
     );
     return $dto;
+  }
+
+  public function fromDTO(AvailabilityInterface $avail, CreateAvailabilityDTO $dto): void
+  {
+    $avail->setDayOfWeek($dto->dayOfWeek);
+    $avail->setOpenTime(new DateTime($dto->openTime));
+    $avail->setCloseTime(new DateTime($dto->closeTime));
   }
 }

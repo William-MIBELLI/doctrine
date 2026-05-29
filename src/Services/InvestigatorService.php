@@ -28,33 +28,6 @@ class InvestigatorService
   }
 
 
-  private function setInvestigatorFromDTO(Investigator $inv, SaveInvestigatorDTO $dto)
-  {
-    $inv->setCode($dto->code);
-    $inv->setLastname($dto->lastname);
-    $inv->setFirstname($dto->firstname);
-    $inv->setAddress($dto->address);
-    $inv->setPostalCode($dto->postalCode);
-    $inv->setCity($dto->city);
-    $inv->setCountry($dto->country);
-    $inv->setPhone($dto->phone);
-    $inv->setLat($dto->lat);
-    $inv->setLng($dto->lng);
-
-    $inv->getAvailabilities()->clear();
-
-    foreach ($dto->availabilities as $availDTO) {
-      $avail = new InvestigatorAvailability();
-
-      $avail->setDayOfWeek($availDTO->dayOfWeek);
-      $avail->setOpenTime(new DateTime($availDTO->openTime));
-      $avail->setCloseTime(new DateTime($availDTO->closeTime));
-      $avail->setInvestigator($inv);
-
-      $inv->addAvailability($avail);
-    }    
-  }
-
   /**
    * Summary of getAllInvestigators
    * @return InvestigatorDTO[]
@@ -88,13 +61,13 @@ class InvestigatorService
   {
 
     $inv = new Investigator();
-    $this->setInvestigatorFromDTO($inv, $dto);
-    
+    $this->mapper->fromDTO($inv, $dto);
+
 
     $this->entityManager->persist($inv);
     $this->entityManager->flush();
 
-    $investigatorDTO = $this->mapper->toDTO($inv, withAvailabilities:true);
+    $investigatorDTO = $this->mapper->toDTO($inv, withAvailabilities: true);
 
     return $investigatorDTO;
   }
@@ -119,7 +92,7 @@ class InvestigatorService
       throw new Exception('Unable to update this investigator', code: 404);
     }
 
-    $this->setInvestigatorFromDTO($inv, $dto);
+    $this->mapper->fromDTO($inv, $dto);
 
     $this->entityManager->flush();
 

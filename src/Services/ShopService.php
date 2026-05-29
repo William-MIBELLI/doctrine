@@ -26,43 +26,6 @@ class ShopService
   }
 
 
-  private function setShopFromDTO(Shop $shop, SaveShopDTO $dto): void
-  {
-
-    $shop->setPlaceCode($dto->placeCode);
-    $shop->setPlaceName($dto->placeName);
-    $shop->setAddress($dto->address);
-    $shop->setPostalCode($dto->postalCode);
-    $shop->setCity($dto->city);
-    $shop->setCountry($dto->country);
-    $shop->setPhone($dto->phone ?? null);
-    $shop->setVisitCode($dto->visitCode);
-    $shop->setVisitName($dto->visitName);
-    $shop->setStartDate($dto->startDate ? new DateTime($dto->startDate) : null);
-    $shop->setEndDate($dto->endDate ? new DateTime($dto->endDate) : null);
-    $shop->setType($dto->type);
-    $shop->setCost($dto->cost);
-    $shop->setLat($dto->lat);
-    $shop->setLng($dto->lng);
-    $shop->setCanBeLunchBreak($dto->canBeLunchBreak ?? false);
-    $shop->setCanBeMorning($dto->canBeMorning ?? false);
-    $shop->setCanBeAfternoon($dto->canBeAfternoon ?? false);
-    $shop->getAvailabilities()->clear();
-
-    foreach ($dto->availabilitiesDTO as $availDTO) {
-
-      $avail = new ShopAvailability();
-
-      $avail->setShop($shop);
-      $avail->setDayOfWeek($availDTO->dayOfWeek);
-      $avail->setOpenTime(new DateTime($availDTO->openTime));
-      $avail->setCloseTime(new DateTime($availDTO->closeTime));
-
-      $shop->addAvaibality($avail);
-    }
-
-  }
-
   /**
    * Summary of getAllShops
    * @return ShopDTO[]
@@ -97,7 +60,7 @@ class ShopService
   {
 
     $shop = new Shop();
-    $this->setShopFromDTO($shop, $dto);
+    $this->mapper->fromDTO($shop, $dto);
 
     $this->entityManager->persist($shop);
     $this->entityManager->flush();
@@ -128,7 +91,7 @@ class ShopService
       throw new Exception("Unable to update this shop", code: 404);
     }
 
-    $this->setShopFromDTO($shop, $dto);
+    $this->mapper->fromDTO($shop, $dto);
     $this->entityManager->flush();
 
     $shopDTO = $this->mapper->toDTO($shop);

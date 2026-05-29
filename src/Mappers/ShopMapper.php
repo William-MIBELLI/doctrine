@@ -2,8 +2,11 @@
 
 namespace App\Mappers;
 
+use App\Entities\ShopAvailability;
+use App\DTO\SaveShopDTO;
 use App\DTO\ShopDTO;
 use App\Entities\Shop;
+use DateTime;
 
 class ShopMapper
 {
@@ -49,5 +52,37 @@ class ShopMapper
     );
 
     return $shopDTO;
+  }
+
+  public function fromDTO(Shop $shop, SaveShopDTO $dto): void
+  {
+     $shop->setPlaceCode($dto->placeCode);
+    $shop->setPlaceName($dto->placeName);
+    $shop->setAddress($dto->address);
+    $shop->setPostalCode($dto->postalCode);
+    $shop->setCity($dto->city);
+    $shop->setCountry($dto->country);
+    $shop->setPhone($dto->phone ?? null);
+    $shop->setVisitCode($dto->visitCode);
+    $shop->setVisitName($dto->visitName);
+    $shop->setStartDate($dto->startDate ? new DateTime($dto->startDate) : null);
+    $shop->setEndDate($dto->endDate ? new DateTime($dto->endDate) : null);
+    $shop->setType($dto->type);
+    $shop->setCost($dto->cost);
+    $shop->setLat($dto->lat);
+    $shop->setLng($dto->lng);
+    $shop->setCanBeLunchBreak($dto->canBeLunchBreak ?? false);
+    $shop->setCanBeMorning($dto->canBeMorning ?? false);
+    $shop->setCanBeAfternoon($dto->canBeAfternoon ?? false);
+    $shop->getAvailabilities()->clear();
+
+    foreach ($dto->availabilitiesDTO as $availDTO) {
+
+      $avail = new ShopAvailability();
+      $this->availabilityMapper->fromDTO($avail, $availDTO);
+      $avail->setShop($shop);
+      
+      $shop->addAvaibality($avail);
+    }
   }
 }
