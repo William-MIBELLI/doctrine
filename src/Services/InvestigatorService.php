@@ -6,6 +6,7 @@ use App\DTO\AvailabilityDTO;
 use App\DTO\InvestigatorDTO;
 use App\DTO\SaveInvestigatorDTO;
 use App\Entities\InvestigatorAvailability;
+use App\Mappers\InvestigatorMapper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repositories\InvestigatorRepository;
@@ -17,47 +18,15 @@ class InvestigatorService
 
   private InvestigatorRepository $investigatorRepository;
   private EntityManagerInterface $entityManager;
+  private InvestigatorMapper $mapper;
 
-  public function __construct(InvestigatorRepository $repo, EntityManagerInterface $em)
+  public function __construct(InvestigatorRepository $repo, EntityManagerInterface $em, InvestigatorMapper $mapper)
   {
     $this->investigatorRepository = $repo;
     $this->entityManager = $em;
+    $this->mapper = $mapper;
   }
 
-  private function mapInvestigatorToDTO(Investigator $inv, bool $withAvailabilities = false): InvestigatorDTO
-  {
-
-    $availabilitiesDTO = [];
-
-    if ($withAvailabilities){
-      foreach ($inv->getAvailabilities() as $avail) {
-        $availabilitiesDTO[] = new AvailabilityDTO(
-          id: $avail->getId(),
-          dayOfWeek: $avail->getDayOfWeek(),
-          openTime: $avail->getOpenTime()->format('H:i'),
-          closeTime: $avail->getCloseTime()->format('H:i')
-        );
-      }
-    }
-
-    $dto = new InvestigatorDTO(
-      id: $inv->getId(),
-      code: $inv->getCode(),
-      lastname: $inv->getLastname(),
-      firstname: $inv->getFirstname(),
-      address: $inv->getAddress(),
-      postalCode: $inv->getPostalCode(),
-      city: $inv->getCity(),
-      country: $inv->getCountry(),
-      phone:$inv->getPhone(),
-      lat: $inv->getLat(),
-      lng: $inv->getLng(),
-      createdAt: $inv->getCreatedAt()->format("c"),
-      availabilities: $availabilitiesDTO
-    );
-
-    return $dto;
-  }
 
   private function setInvestigatorFromDTO(Investigator $inv, SaveInvestigatorDTO $dto)
   {
@@ -92,11 +61,11 @@ class InvestigatorService
    */
   public function getAllInvestigators(): array
   {
-    $investigators = $this->investigatorRepository->getAllInvestigators();
+    $investigators = $this->investigatorRepository->findAllInvestigators();
     $dtos = [];
 
     foreach ($investigators as $inv) {
-      $dtos[] = $this->mapInvestigatorToDTO($inv);
+      $dtos[] = $this->mapper->toDTO($inv);
     }
 
     return $dtos;
@@ -110,7 +79,7 @@ class InvestigatorService
       throw new Exception("Unable to retrieve investigator with this id", 404);
     }
 
-    $dto = $this->mapInvestigatorToDTO($investigator, true);
+    $dto = $this->mapper->toDTO($investigator, true);
 
     return $dto;
   }
@@ -125,7 +94,7 @@ class InvestigatorService
     $this->entityManager->persist($inv);
     $this->entityManager->flush();
 
-    $investigatorDTO = $this->mapInvestigatorToDTO($inv, withAvailabilities:true);
+    $investigatorDTO = $this->mapper->toDTO($inv, withAvailabilities:true);
 
     return $investigatorDTO;
   }
@@ -154,7 +123,7 @@ class InvestigatorService
 
     $this->entityManager->flush();
 
-    $updatedDTO = $this->mapInvestigatorToDTO($inv, withAvailabilities: true);
+    $updatedDTO = $this->mapper->toDTO($inv, withAvailabilities: true);
 
     return $updatedDTO;
   }
