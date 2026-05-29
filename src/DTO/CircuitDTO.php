@@ -2,7 +2,6 @@
 
 namespace App\DTO;
 
-use App\Entities\Stop;
 
 class CircuitDTO
 {
@@ -17,9 +16,9 @@ class CircuitDTO
     public int $visitDurationSec,
     public int $totalDurationSec,
     public int $travelDistanceMeters,
-    public InvestigatorDTO $investigator,
+    public int $investigatorId,
 
-    /** @var Stop[] */
+    /** @var StopDTO[] */
     public array $stops
   ) {}
 }

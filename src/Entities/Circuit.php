@@ -170,6 +170,10 @@ class Circuit
     $this->investigator = $value;
   }
 
+  /**
+   * Summary of getStops
+   * @return Collection|Stop[]
+   */
   public function getStops(): Collection
   {
     return $this->stops;

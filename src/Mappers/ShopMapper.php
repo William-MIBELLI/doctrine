@@ -56,7 +56,7 @@ class ShopMapper
 
   public function fromDTO(Shop $shop, SaveShopDTO $dto): void
   {
-     $shop->setPlaceCode($dto->placeCode);
+    $shop->setPlaceCode($dto->placeCode);
     $shop->setPlaceName($dto->placeName);
     $shop->setAddress($dto->address);
     $shop->setPostalCode($dto->postalCode);
@@ -81,8 +81,8 @@ class ShopMapper
       $avail = new ShopAvailability();
       $this->availabilityMapper->fromDTO($avail, $availDTO);
       $avail->setShop($shop);
-      
-      $shop->addAvaibality($avail);
+
+      $shop->addAvailability($avail);
     }
   }
 }

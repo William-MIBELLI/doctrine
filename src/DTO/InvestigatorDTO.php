@@ -19,6 +19,7 @@ readonly class InvestigatorDTO
     public string $createdAt,
 
     /** @var AvailabilityDTO[] */
-    public array $availabilities = []
+    public array $availabilities = [],
+
   ) {}
 }

@@ -10,7 +10,7 @@ class StopDTO
     public string $label,
     public string $startTime,
     public string $createdAt,
-    public ShopDTO $shop,
-    public CircuitDTO $circuit
+    public int $shopId,
+    public int $circuitId
   ) {}
 }
