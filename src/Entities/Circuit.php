@@ -2,12 +2,13 @@
 
 namespace App\Entities;
 
+use App\Repositories\CircuitRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Orm\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CircuitRepository::class)]
 #[ORM\Table(name: 'circuits')]
 class Circuit
 {
