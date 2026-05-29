@@ -3,8 +3,9 @@
 namespace App\Controllers;
 
 use App\Services\CircuitService;
+use Throwable;
 
-class CircuitController
+class CircuitController extends AbstractController
 {
   private CircuitService $service;
 
@@ -13,5 +14,12 @@ class CircuitController
     $this->service = $service;
   }
 
-  
+  public function list()
+  {
+    try {
+      $circuits = $this->service->getAllCircuits();
+    } catch (Throwable $th) {
+      $this->ErrorResponse($th);
+    }
+  }
 }
