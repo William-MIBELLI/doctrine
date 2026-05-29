@@ -6,6 +6,9 @@ use App\Controllers\InvestigatorAvailabilityController;
 use App\Controllers\ShopAvailabilityController;
 use App\Entities\Investigator;
 use App\Entities\Shop;
+use App\Mappers\AvailabilityMapper;
+use App\Mappers\InvestigatorMapper;
+use App\Mappers\ShopMapper;
 use App\Routes\AppRouter;
 use App\Services\InvestigatorAvailabilityService;
 use App\Services\InvestigatorService;
@@ -16,13 +19,17 @@ use App\Controllers\ShopController;
 use App\Entities\ShopAvailability;
 use App\Entities\InvestigatorAvailability;
 
+$availibilityMapper = new AvailabilityMapper();
+$shopMapper = new ShopMapper($availibilityMapper);
+$investigatorMapper = new InvestigatorMapper($availibilityMapper);
+
 
 $shopRepository = $entityManager->getRepository(Shop::class);
-$shopService = new ShopService($shopRepository, $entityManager);
+$shopService = new ShopService($shopRepository, $entityManager, $shopMapper);
 $shopController = new ShopController($shopService);
 
 $investigatorRepository = $entityManager->getRepository(Investigator::class);
-$investigatorService = new InvestigatorService($investigatorRepository, $entityManager);
+$investigatorService = new InvestigatorService($investigatorRepository, $entityManager, $investigatorMapper);
 $investigatorController = new InvestigatorController($investigatorService);
 
 $shopAvailabilityRepository = $entityManager->getRepository(ShopAvailability::class);

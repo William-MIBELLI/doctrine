@@ -2,11 +2,12 @@
 
 namespace App\Entities;
 
+use App\Entities\Interfaces\AvailabilityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
 
 #[ORM\MappedSuperclass]
-abstract class AbstractAvailability
+abstract class AbstractAvailability implements AvailabilityInterface
 {
   #[ORM\Id]
   #[ORM\Column(type: 'integer')]
@@ -43,17 +44,17 @@ abstract class AbstractAvailability
   }
 
 
-	public function setCloseTime(DateTime $value) {
+	public function setCloseTime(DateTime $value): void {
 		$this->closeTime = $value;
 	}
 
 
-	public function setOpenTime(DateTime $value) {
+	public function setOpenTime(DateTime $value): void {
 		$this->openTime = $value;
 	}
 
 
-	public function setDayOfWeek(int $value) {
+	public function setDayOfWeek(int $value): void {
 		$this->dayOfWeek = $value;
 	}
 }
