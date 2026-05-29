@@ -2,15 +2,21 @@
 
 namespace App\Repositories;
 
+use App\Entities\Circuit;
 use Doctrine\ORM\EntityRepository;
 
 class CircuitRepository extends EntityRepository
 {
 
-  public function __construct()
+  /**
+   * Summary of findAllCircuits
+   * @return Circuit[]
+   */
+  public function findAllCircuits()
   {
-
+    return $this->findAll();
   }
 
+  
   
 }
