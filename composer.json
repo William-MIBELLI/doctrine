@@ -5,7 +5,8 @@
     "symfony/cache": "^7",
     "symfony/serializer-pack": "^1.4",
     "bramus/router": "~1.6",
-    "rakit/validation": "^1.4"
+    "rakit/validation": "^1.4",
+    "google/maps-routeoptimization": "^0.6.2"
   },
   "autoload": {
     "psr-4": {
