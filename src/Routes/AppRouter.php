@@ -61,8 +61,6 @@ class AppRouter
         $this->router->mount('/circuit', function () use ($circuitController) {
             $this->router->get('/', [$circuitController, 'list']);
             $this->router->get('/{id}', [$circuitController, 'show']);
-            $this->router->get('/byInvestigatorId/{id}', [$circuitController, 'showByInvestigator']);
-            $this->router->get('/byShopId/{id}', [$circuitController, 'showByShop']);
             $this->router->post('/', [$circuitController, 'create']);
             $this->router->delete('/{id}', [$circuitController, 'delete']);
         });
